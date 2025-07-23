@@ -83,10 +83,10 @@ const versions = sigfiles.map((file) => {
 })
 
 //lazy because only one sig file at a time in this version
-const dir = process.argv[3]+"/"+device+"_"+versions[0]+"_recovery";
+const dir = path.join(process.argv[3], `${device}_${versions[0]}_recovery`);
 if(!fs.existsSync(dir))
     fs.mkdirSync(dir)
-const deleteme = cwd()+"/"+package;
+const deleteme = path.join(cwd(), package);
 process.chdir(dir)
 
 const decryptSigFile = (sigfile, key) => {
@@ -104,7 +104,7 @@ const decryptSigFile = (sigfile, key) => {
 var binfiles = []
 sigfiles.forEach(sigfile => {
     //umm, ugh, don't look here. yes, this is kinda wrong.
-    decryptSigFile("../../tmp/"+sigfile, keys[device].decrypt)
+    decryptSigFile(path.join("../../tmp", sigfile), keys[device].decrypt)
     binfiles.push(...fs.readdirSync(process.cwd()).filter((file) => { return new RegExp(path.basename(sigfile).slice(0, -4)+"_(.*).bin").test(file)}))
 })
 
